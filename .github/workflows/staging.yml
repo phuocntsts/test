@@ -1,0 +1,23 @@
+name: Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  Build_and_Deploy:
+    runs-on: ubuntu-latest
+    environment: STAGING
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate environment file
+        run: |
+          env
+          envsubst  < .env.template > .env.staging
+          pwd
+          ls -la
+          cat .env.staging
+          echo ${{ vars.env1 }}
