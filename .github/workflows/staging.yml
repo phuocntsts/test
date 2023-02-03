@@ -15,9 +15,11 @@ jobs:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJSON(vars) }}
-        run: echo "$GITHUB_CONTEXT"
+          GITHUB_CONTEXT2: ${{ toJSON(secrets) }}
+        run: jq -s '.[0] * .[1]' "$GITHUB_CONTEXT" "$GITHUB_CONTEXT2" > merge.json
       - name: test
         run: |
+          cat merge.json
           echo '${{ toJson(vars) }}' > /dev/null 2>&1 > test.json
       - run: cat test.json
       - run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json > .env.staging
