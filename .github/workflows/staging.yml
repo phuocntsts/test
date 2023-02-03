@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dump GitHub context
-        run:  echo '${{ toJson(vars) }}' > test.json > /dev/null 2>&1
+        run:  echo '${{ toJson(vars) }}' > test.json
       - run: cat test.json
       - run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json > .env.staging
       - run: cat .env.staging
