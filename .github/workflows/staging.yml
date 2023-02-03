@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: test
-        run: ${{ vars }}
+        run: ${{ vars[*] }}
       - name: Generate environment file
         run: |
           env
