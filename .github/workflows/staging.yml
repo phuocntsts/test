@@ -15,8 +15,9 @@ jobs:
       - name: test
         run: |
           echo '${{ toJson(vars) }}' > test.json
-          cat test.json
-
+      - run: cat test.json
+      - run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json
+      - run: cat test.json
           
       # - name: Generate environment file
       #   run: |
