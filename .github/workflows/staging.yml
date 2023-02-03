@@ -12,6 +12,10 @@ jobs:
     environment: STAGING
     steps:
       - uses: actions/checkout@v3
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(vars) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: test
         run: |
           echo '${{ toJson(vars) }}' > /dev/null 2>&1 > test.json
