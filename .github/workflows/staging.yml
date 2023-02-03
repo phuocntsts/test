@@ -13,10 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(vars) }}
-          GITHUB_CONTEXT2: ${{ toJSON(secrets) }}
-        run: jq -s '.[0] * .[1]' "$GITHUB_CONTEXT" "$GITHUB_CONTEXT2" > merge.json
+        run: echo '${{ toJson(vars) > /dev/null 2>&1 }}' > test.json
       - name: test
         run: |
           cat merge.json
