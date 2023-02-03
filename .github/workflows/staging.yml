@@ -14,13 +14,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: test
         run: |
-          echo ${{ toJson(vars) }} > "test.json"
-          echo "print test.json"
-          cat test.json
-          echo "conver to key-value"
-          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json
-          echo "print conver"
-          cat test.json
+          echo ${{ toJson(vars) }}
+          # echo ${{ toJson(vars) }} > "test.json"
+          # echo "print test.json"
+          # cat test.json
+          # echo "conver to key-value"
+          # jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json
+          # echo "print conver"
+          # cat test.json
 
           
       # - name: Generate environment file
