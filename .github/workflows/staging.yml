@@ -14,9 +14,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: test
         run: |
-          echo ${{ toJson(vars.*) }}
+          echo ${{ toJson(vars) }}
           echo "==="
-          ${{ toJson(vars.*) }}
+          ${{ toJson(vars) }}
       - name: Generate environment file
         run: |
           env
