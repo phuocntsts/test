@@ -12,6 +12,10 @@ jobs:
     environment: STAGING
     steps:
       - uses: actions/checkout@v3
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(vars) }}
+        run: echo "$RUNNER_CONTEXT"
       - name: Dump GitHub context
         run:  echo '${{ toJson(vars) }}' > test.json
       - name: print test.json
