@@ -15,7 +15,9 @@ jobs:
       - name: Dump runner context
         env:
           RUNNER_CONTEXT: ${{ toJson(vars) }}
-        run: echo "$RUNNER_CONTEXT"
+        run: |
+          echo "$RUNNER_CONTEXT" > test2.json
+          cat test2.json
       - name: Dump GitHub context
         run:  echo '${{ toJson(vars) }}' > test.json
       - name: print test.json
