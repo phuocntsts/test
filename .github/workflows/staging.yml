@@ -23,7 +23,7 @@ jobs:
       - name: print test.json
         run: cat test.json
       - name: conver to key-value
-        run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test.json > .env.staging
+        run: jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' test2.json > .env.staging
       - run: cat .env.staging
           
       # - name: Generate environment file
