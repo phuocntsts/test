@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: to json
-        run: ${{ toJson(vars) }}
+        run: '${{ toJson(vars) }}'
       - name: Dump GitHub context
         run:  echo '${{ toJson(vars) }}' > test.json
       - name: print test.json
