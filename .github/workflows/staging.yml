@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ["main", "staging"]
 env:
-  test_env: main
+  test_env: ${{ if endsWith(github.ref, '/staginf'),'STAGING','PRODUCTION' }}
 jobs:
   Build:
     runs-on: ubuntu-latest
