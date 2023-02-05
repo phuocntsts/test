@@ -2,14 +2,32 @@ name: Pipeline
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-
+    branches: ["main", "staging"]
+  #pull_request:
+  # branches: ["main", "staging"]
+env:
+  test_env: |
+    run
 jobs:
-  Build_and_Deploy:
+  pre-build:
     runs-on: ubuntu-latest
-    environment: STAGING
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
+    steps:
+      - id: branch_check
+        run: |
+          echo "Running on branch ${{ github.ref }}"
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "::set-output name=env_name::PRODUCTION"
+          elif [ "${{ github.ref }}" = "refs/heads/staging" ]; then
+            echo "::set-output name=env_name::STAGING"
+          else
+            echo "::set-output name=env_name::dev"
+          fi
+  Deploy:
+    needs: [pre-build]
+    runs-on: ubuntu-latest
+    environment: ${{needs.pre-build.outputs.env_name}}
     steps:
       - uses: actions/checkout@v3
       - name: Dump runner context
@@ -27,13 +45,14 @@ jobs:
       - run: |
           mkdir test
           mv .env.staging test/.
-          
-      - uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
-        env:
-          AWS_S3_BUCKET: 'batongapp-dev.com'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: 'test'
+          cat test/.env.staging
+
+      #- uses: jakejarvis/s3-sync-action@master
+      #  with:
+      #    args: --delete
+      #  env:
+      #    AWS_S3_BUCKET: 'batongapp-dev.com'
+      #    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    SOURCE_DIR: 'test'
 
