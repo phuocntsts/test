@@ -5,11 +5,16 @@ on:
     branches: ["main", "staging"]
   pull_request:
     branches: ["main", "staging"]
-
+env:
+  test: main
 jobs:
-  Build_and_Deploy:
+  Build:
     runs-on: ubuntu-latest
-    #environment: STAGING
+    environment: STAGING
+  Deploy:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    environment: ${{ env.test }}
     steps:
       - uses: actions/checkout@v3
       - name: Dump runner context
@@ -28,7 +33,7 @@ jobs:
           mkdir test
           mv .env.staging test/.
           cat test/.env.staging
-          
+
       #- uses: jakejarvis/s3-sync-action@master
       #  with:
       #    args: --delete
