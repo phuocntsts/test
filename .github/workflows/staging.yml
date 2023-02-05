@@ -6,17 +6,28 @@ on:
   pull_request:
     branches: ["main", "staging"]
 env:
-  test_env: ${{ if endsWith(github.ref, '/staginf'),'STAGING','PRODUCTION' }}
+  test_env: |
+    run
 jobs:
-  Build:
+  pre-build:
     runs-on: ubuntu-latest
-    environment: STAGING
+    outputs:
+      env_name: ${{ steps.branch_check.outputs.env_name }}
     steps:
-      - run: echo "hello"
+      - id: branch_check
+        run: 
+          echo "Running on branch ${{ github.ref }}"
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "::set-output name=env_name::PRODUCTION"
+          elif [ "${{ github.ref }}" = "refs/heads/staging" ]; then
+            echo "::set-output name=env_name::STAGING"
+          else
+             echo "::set-output name=env_name::DEV"
+          fi
   Deploy:
-    needs: [Build]
+    needs: [pre-build]
     runs-on: ubuntu-latest
-    environment: $test_env
+    environment: ${{needs.pre-build.outputs.env_name}}
     steps:
       - uses: actions/checkout@v3
       - name: Dump runner context
