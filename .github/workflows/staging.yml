@@ -2,14 +2,14 @@ name: Pipeline
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "staging"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "staging"]
 
 jobs:
   Build_and_Deploy:
     runs-on: ubuntu-latest
-    environment: STAGING
+    #environment: STAGING
     steps:
       - uses: actions/checkout@v3
       - name: Dump runner context
@@ -27,13 +27,14 @@ jobs:
       - run: |
           mkdir test
           mv .env.staging test/.
+          cat test/.env.staging
           
-      - uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
-        env:
-          AWS_S3_BUCKET: 'batongapp-dev.com'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: 'test'
+      #- uses: jakejarvis/s3-sync-action@master
+      #  with:
+      #    args: --delete
+      #  env:
+      #    AWS_S3_BUCKET: 'batongapp-dev.com'
+      #    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    SOURCE_DIR: 'test'
 
