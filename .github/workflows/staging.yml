@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ["main", "staging"]
 env:
-  test: main
+  test_env: main
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
   Deploy:
     needs: [Build]
     runs-on: ubuntu-latest
-    environment: ${{ env.test }}
+    environment: $test_env
     steps:
       - uses: actions/checkout@v3
       - name: Dump runner context
